@@ -1,0 +1,124 @@
+/* INTEC Energy Solutions, demo homepage.
+   Palette: INTEC's two logo colours (INTEC-Logo.svg: green #008149, orange #e67325) set on the reference's neutrals
+   (breakthroughenergy.org: near-black ink, warm cream paper). Type: INTEC's own pair from the live site, Sora for
+   display and Manrope for text, both self-hosted variable fonts. */
+
+@font-face {
+  font-family: "Sora";
+  src: url("/fonts/sora-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/manrope-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+:root {
+  --ink: #0e1311;
+  --ink-2: #1a201d;
+  --paper: #f6f7f2;
+  --stone: #e7e9e1;
+  --white: #ffffff;
+  --green: #008149;
+  --green-deep: #00673a;
+  --orange: #e67325;
+  --muted: rgba(14, 19, 17, .62);
+  --muted-on-dark: rgba(246, 247, 242, .64);
+  --line: rgba(14, 19, 17, .14);
+  --line-on-dark: rgba(246, 247, 242, .16);
+
+  --display: "Sora", "Helvetica Neue", Arial, sans-serif;
+  --text: "Manrope", "Helvetica Neue", Arial, sans-serif;
+
+  /* breakthroughenergy.org's house curve for reveals and hovers (an expo-style ease-out). */
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --ease-io: cubic-bezier(.65, 0, .35, 1);
+
+  --gutter: clamp(20px, 3.4vw, 48px);
+  --max: 1440px;
+  --section: clamp(64px, 8vw, 96px);
+  --radius: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img, video, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul, ol { list-style: none; padding: 0; }
+::selection { background: var(--green); color: var(--white); }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip-link { position: fixed; left: 12px; top: -60px; z-index: 200; background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 8px; }
+.skip-link:focus { top: 12px; }
+
+/* Type scale. Display sizes follow the reference's: big, tight, light-to-regular weight. */
+.display { font-family: var(--display); font-weight: 400; letter-spacing: -.035em; line-height: 1.02; }
+.h1 { font-family: var(--display); font-weight: 400; font-size: clamp(42px, 6.4vw, 96px); letter-spacing: -.04em; line-height: 1; }
+.h2 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 4.4vw, 64px); letter-spacing: -.035em; line-height: 1.04; }
+.h3 { font-family: var(--display); font-weight: 400; font-size: clamp(22px, 2vw, 30px); letter-spacing: -.02em; line-height: 1.15; }
+.label { font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
+.lede { font-size: clamp(17px, 1.3vw, 19px); line-height: 1.6; color: var(--muted); }
+.muted { color: var(--muted); }
+.accent { color: var(--green); }
+[data-tone="dark"] .accent, .on-dark .accent { color: #3fbf7f; }
+
+/* Buttons: the reference's rounded pills; a filled dot carries the arrow and slides on hover. */
+.btn {
+  display: inline-flex; align-items: center; gap: 14px;
+  height: 52px; padding: 0 8px 0 24px; border-radius: 999px;
+  font-family: var(--display); font-size: 15px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap;
+  transition: background-color .45s var(--ease), color .45s var(--ease), border-color .45s var(--ease);
+}
+.btn .btn-dot { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; transition: background-color .45s var(--ease), color .45s var(--ease); }
+.btn .btn-dot svg { transition: transform .5s var(--ease); }
+.btn:hover .btn-dot svg { transform: translateX(3px); }
+.btn-ink { background: var(--ink); color: var(--paper); }
+.btn-ink .btn-dot { background: var(--green); color: var(--white); }
+.btn-ink:hover { background: var(--green); }
+.btn-ink:hover .btn-dot { background: var(--paper); color: var(--green); }
+.btn-paper { background: var(--paper); color: var(--ink); }
+.btn-paper .btn-dot { background: var(--green); color: var(--white); }
+.btn-paper:hover { background: var(--white); }
+.btn-orange { background: var(--orange); color: var(--white); }
+.btn-orange .btn-dot { background: rgba(255, 255, 255, .22); }
+.btn-orange:hover { background: #d4641a; }
+.btn-line { border: 1px solid currentColor; color: inherit; }
+.btn-line .btn-dot { background: var(--green); color: var(--white); }
+.btn-sm { height: 42px; padding: 0 6px 0 18px; font-size: 14px; gap: 10px; }
+.btn-sm .btn-dot { width: 30px; height: 30px; }
+
+/* Text link with a drawn underline. */
+.u-link { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease); padding-bottom: 1px; }
+.u-link:hover { background-size: 100% 1px; }
+
+/* Reveal start states, applied only when JS is running (html.js) and lifted by motion.tsx (data-shown). */
+html.js [data-reveal]:not([data-shown]) { opacity: 0; }
+html.js [data-reveal="text"]:not([data-shown]) { opacity: 1; }
+.wm { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.wi { display: inline-block; will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
