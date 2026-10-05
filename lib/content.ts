@@ -161,7 +161,7 @@ export const partners = {
     ["Ref_0002_Vattenfall_logo2.svg.png", "Vattenfall"],
     ["Ref_0001_61fa9155223f7.png", "Ikaros Solar"],
     ["Ref_0021_67cedcc0b7c76.png", "Münch Energie"],
-    ["Ref_0020_2336e62adf7fa4ffa6ebd5e1695789.png", "Partner"],
+    ["Ref_0020_enerparc-light.png", "Enerparc"],
     ["Ref_0019_1361803.png", "RWE"],
     ["Ref_0018_alight.png", "Alight"],
     ["Ref_0017_aukera.png", "Aukera"],

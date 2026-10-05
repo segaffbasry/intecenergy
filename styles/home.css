@@ -14,22 +14,27 @@ html.js .hero-media { clip-path: inset(50% 50% 50% 50% round 18px); }
 .hero-title {
   position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(56px, 9vh, 96px);
   font-family: var(--display); font-weight: 400; letter-spacing: -.045em; line-height: .98;
-  font-size: clamp(40px, 7vw, 112px); max-width: 15ch;
+  font-size: clamp(36px, 4.9vw, 80px);
 }
 .hero-line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
 .hero-line > span { display: inline-block; }
-.hero-typed { min-height: 1.08em; white-space: nowrap; }
-.hero-ground .hero-typed { color: var(--green); }
-.hero-media .hero-typed { color: var(--white); }
-.hero-caret { display: inline-block; width: .06em; height: .82em; margin-left: .06em; vertical-align: -.04em; background: var(--orange); animation: caret 1s steps(1) infinite; }
-@keyframes caret { 50% { opacity: 0; } }
+/* Static lead on one line; the service phrase rolls up underneath it (client feedback 5 Oct). */
+.hero-lead { white-space: nowrap; }
+.hero-roll > span { display: block; height: 1.12em; overflow: hidden; }
+.hero-roll-list { display: block; transition: transform .9s var(--ease); }
+.hero-roll-list.is-snap { transition: none; }
+.hero-roll-item { display: block; height: 1.12em; line-height: 1.12; white-space: nowrap; }
+.hero-ground .hero-roll { color: var(--green); }
+.hero-media .hero-roll { color: var(--white); }
 .hero-cue { position: absolute; right: var(--gutter); bottom: clamp(56px, 9vh, 96px); width: 26px; height: 42px; border-radius: 14px; border: 1.5px solid var(--white); mix-blend-mode: difference; }
 .hero-cue span { position: absolute; left: 50%; top: 8px; width: 3px; height: 8px; margin-left: -1.5px; border-radius: 2px; background: var(--white); animation: cue 1.8s var(--ease) infinite; }
 @keyframes cue { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
 @media (max-width: 767px) {
   .hero { height: 170vh; height: 170svh; }
-  .hero-title { font-size: clamp(36px, 10.6vw, 56px); bottom: 64px; }
-  .hero-typed { white-space: normal; min-height: 2.1em; }
+  .hero-title { font-size: clamp(28px, 7.6vw, 44px); bottom: 64px; }
+  .hero-lead { white-space: normal; }
+  /* A touch smaller on phones so the longest phrase, "Operations and Maintenance", still fits on one line. */
+  .hero-roll { font-size: .86em; }
   .hero-cue { display: none; }
 }
 
@@ -81,9 +86,9 @@ html.js .hero-media { clip-path: inset(50% 50% 50% 50% round 18px); }
 
 /* ---------- Footprint (the reference's numbers scene) ---------- */
 .footprint { background: var(--ink); color: var(--paper); padding: var(--section) 0; }
-.fp-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; }
-.fp-hint { color: var(--muted-on-dark); font-size: 15px; }
-.fp-map { position: relative; margin: clamp(32px, 4vw, 56px) auto 0; max-width: 1180px; aspect-ratio: 1600 / 1036; }
+.fp-grid { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: clamp(32px, 4vw, 64px); align-items: center; }
+.fp-hint { margin-top: 14px; color: var(--muted-on-dark); font-size: 14px; text-align: right; }
+.fp-map { position: relative; aspect-ratio: 1600 / 1036; }
 .fp-map img { width: 100%; height: 100%; }
 .fp-pin { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; display: grid; place-items: center; }
 .fp-pin::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 3px rgba(230, 115, 37, .25); transition: transform .4s var(--ease); }
@@ -94,15 +99,20 @@ html.js .hero-media { clip-path: inset(50% 50% 50% 50% round 18px); }
 .fp-tip strong { font-family: var(--display); font-size: 16px; font-weight: 600; color: var(--green); }
 .fp-pin.is-on { z-index: 4; }
 .fp-pin.is-on .fp-tip { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition-delay: 0s; }
-.fp-stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 32px; margin-top: clamp(40px, 5vw, 64px); }
-.fp-num { font-size: clamp(32px, 3.6vw, 56px); line-height: 1; white-space: nowrap; }
+.fp-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 28px; margin-top: clamp(28px, 3vw, 40px); }
+.fp-stats li:first-child { grid-column: 1 / -1; }
+.fp-num { font-size: clamp(28px, 2.6vw, 40px); line-height: 1; white-space: nowrap; }
+.fp-stats li:first-child .fp-num { font-size: clamp(48px, 5vw, 76px); }
 .fp-num .fp-word { font-size: .5em; letter-spacing: -.01em; }
 .fp-suffix { color: #3fbf7f; }
-.fp-label { margin-top: 12px; font-size: 14px; color: var(--muted-on-dark); max-width: 18ch; }
-.fp-cta { margin-top: 48px; }
-@media (max-width: 1100px) { .fp-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fp-label { margin-top: 8px; font-size: 14px; color: var(--muted-on-dark); max-width: 22ch; }
+.fp-cta { margin-top: 36px; }
+@media (max-width: 960px) {
+  .fp-grid { grid-template-columns: 1fr; }
+  .fp-side { order: -1; }
+  .fp-hint { text-align: left; }
+}
 @media (max-width: 640px) {
-  .fp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fp-pin { width: 16px; height: 16px; margin: -8px 0 0 -8px; }
   .fp-pin::before { width: 6px; height: 6px; }
 }
@@ -154,13 +164,14 @@ html.js .hero-media { clip-path: inset(50% 50% 50% 50% round 18px); }
 
 /* ---------- Partners ---------- */
 .partners { padding: var(--section) 0; background: var(--paper); overflow: hidden; }
-.marquee { display: grid; gap: 14px; margin-top: clamp(32px, 4vw, 48px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee { display: grid; gap: 8px; margin-top: clamp(32px, 4vw, 48px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
 .marquee-row { overflow: hidden; }
 .marquee-track { display: flex; width: max-content; animation: marquee 60s linear infinite; }
 .marquee-row.is-reverse .marquee-track { animation-direction: reverse; animation-duration: 70s; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translateX(-50%); } }
-.marquee-track li { flex: none; width: clamp(150px, 14vw, 200px); height: 96px; margin-right: 14px; border-radius: 12px; background: var(--white); display: grid; place-items: center; padding: 18px 26px; }
+/* Logos sit straight on the paper, no cards (client feedback 5 Oct). */
+.marquee-track li { flex: none; width: clamp(140px, 13vw, 190px); height: 72px; margin-right: clamp(28px, 3vw, 48px); display: grid; place-items: center; }
 .marquee-track img { max-height: 44px; width: auto; object-fit: contain; filter: grayscale(1); opacity: .62; transition: filter .5s var(--ease), opacity .5s var(--ease); }
 .marquee-track li:hover img { filter: none; opacity: 1; }
 

@@ -6,24 +6,24 @@ import { useEffect, useRef, useState } from "react";
 import { reducedMotion } from "@/components/ui";
 import { hero } from "@/lib/content";
 
-/* The live hero's typed line (bdt animated heading: typeSpeed 90ms, backSpeed 30ms, backDelay 1800ms, looping). */
-function useTyped(words: string[], run: boolean) {
-  const [text, setText] = useState(words[0]);
+/* The live hero's five phrases, rolled up one after another instead of typed (client feedback 5 Oct). The list
+   ends with a copy of the first phrase: after rolling onto it, the roller snaps back to the real first one with the
+   transition off, so the loop never runs backwards. Both copies of the headline read the same step. */
+const HOLD = 2600; // ms each phrase stays up
+function useRoller(count: number, run: boolean) {
+  const [step, setStep] = useState(0);
+  const [snap, setSnap] = useState(false);
   useEffect(() => {
     if (!run || reducedMotion()) return;
-    let word = 0, chars = words[0].length, deleting = false, timer = 0;
-    const step = () => {
-      const current = words[word];
-      if (!deleting && chars === current.length) { deleting = true; timer = window.setTimeout(step, 1800); return; }
-      if (deleting && chars === 0) { deleting = false; word = (word + 1) % words.length; timer = window.setTimeout(step, 300); return; }
-      chars += deleting ? -1 : 1;
-      setText(words[word].slice(0, chars));
-      timer = window.setTimeout(step, deleting ? 30 : 90);
-    };
-    timer = window.setTimeout(step, 1800);
-    return () => window.clearTimeout(timer);
-  }, [words, run]);
-  return text;
+    const timer = window.setInterval(() => { setSnap(false); setStep((n) => n + 1); }, HOLD);
+    return () => window.clearInterval(timer);
+  }, [run]);
+  useEffect(() => {
+    if (step < count) return;
+    const t = window.setTimeout(() => { setSnap(true); setStep(0); }, 900); // after the roll onto the copy finishes
+    return () => window.clearTimeout(t);
+  }, [step, count]);
+  return { step, snap };
 }
 
 /* Clip rectangle of the film, as insets in % of the screen [top, right, bottom, left] and a corner radius in px. */
@@ -37,11 +37,11 @@ const clip = ([t, r, b, l, radius]: Box) => `inset(${t}% ${r}% ${b}% ${l}% round
    while the film plays inside a rounded window; scrolling grows the window until it fills the screen. The headline
    exists twice, ink on the ground and white inside the window, so the letters change colour exactly where the
    window's edge crosses them. Here the window starts on the right half (top on phones) and the headline sits
-   bottom-left, so the crossing runs through the typed line. Sticky, scrubbed to scroll, 100vh of travel. */
+   bottom-left, so the crossing runs through the rolling line. Sticky, scrubbed to scroll, 100vh of travel. */
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const [live, setLive] = useState(false);
-  const typed = useTyped(hero.words, live);
+  const roll = useRoller(hero.words.length, live);
 
   useEffect(() => {
     const el = ref.current; if (!el) return;
@@ -83,8 +83,12 @@ export default function Hero() {
   }, []);
 
   const headline = (copy: boolean) => <h1 className="hero-title" aria-hidden={copy || undefined} aria-label={copy ? undefined : `${hero.lead} ${hero.words.join(", ")}`}>
-    <span className="hero-line"><span>{hero.lead}</span></span>
-    <span className="hero-line hero-typed"><span>{typed}<i className="hero-caret" /></span></span>
+    <span className="hero-line hero-lead"><span>{hero.lead.replace(/ (\S+)$/, "\u00a0$1") /* keep "with our" together when it wraps */}</span></span>
+    <span className="hero-line hero-roll"><span>
+      <span className={`hero-roll-list${roll.snap ? " is-snap" : ""}`} style={{ transform: `translateY(${-roll.step * 100 / (hero.words.length + 1)}%)` }}>
+        {[...hero.words, hero.words[0]].map((w, i) => <span key={i} className="hero-roll-item">{w}</span>)}
+      </span>
+    </span></span>
   </h1>;
 
   return <section className="hero" ref={ref} data-hero>
